@@ -46,6 +46,8 @@ public class card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
     Vector2 labelPosition = new Vector2(0, 0);
     public buttonHold BH;
 
+    [SerializeField] private bool dummyCard;
+
     private void OnEnable()
     {
         for (int i = 0; i < typeButton.Length; i++)
@@ -121,6 +123,7 @@ public class card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         }
         Debug.Log(currentType);
         updateState();
+
         return currentType;
     }
 
@@ -301,7 +304,7 @@ public class card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
                     break;
             }
             updateState();
-            updateLastChanged.record();
+            updateLastChanged.record(-2);
         }
     }
     public bool isHolding = false;
@@ -330,7 +333,7 @@ public class card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         Debug.Log("Hold complete!");
         SaveData(true);
         Destroy(gameObject);
-        updateLastChanged.record();
+        updateLastChanged.record(-1,0,cardName);
     }
     private void OnTypeButtonClick()
     {
@@ -365,7 +368,7 @@ public class card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         cmds.Push(currentType);
         actions.Push(1);
         updateState();
-        updateLastChanged.record();
+        updateLastChanged.record(1, currentType, cardName);
     }
     private void OnAbsentButtonClick()
     {
@@ -390,7 +393,7 @@ public class card : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
         cmds.Push(currentType);
         actions.Push(0);
         updateState();
-        updateLastChanged.record();
+        updateLastChanged.record(0, currentType, cardName);
     }
     void SaveData(bool removal = false)
     {

@@ -18,6 +18,8 @@ public class cardsManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI indicatorBar;
     [SerializeField] private List<card> cardsList = new List<card>();
 
+    [SerializeField] private GameObject dummyCard;
+    int numberOfCards;
 
     private void Start()
     {
@@ -37,6 +39,16 @@ public class cardsManager : MonoBehaviour
     bool isHolding = false;
     bool isHolding_undo = false;
     private void Update() {
+        numberOfCards = cardsList.Count;
+        if(numberOfCards != 0 || PlayerPrefs.HasKey("DummyDelete"))
+        {
+            if(dummyCard != null)
+            {
+                PlayerPrefs.SetInt("DummyDelete",1);
+                PlayerPrefs.Save();
+                Destroy(dummyCard);
+            }
+        }
         isHolding = false;
         isHolding_undo = false;
         int ratioValue = 0; // Initialize ratioValue to 0
@@ -123,4 +135,6 @@ public class cardsManager : MonoBehaviour
             return null;
         }
     }
+
+    
 }
