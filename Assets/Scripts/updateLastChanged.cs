@@ -82,7 +82,7 @@ public static class updateLastChanged
         }
         Debug.Log(recordLog);
         records.Add(recordLog);
-        if(records.Count > 6)
+        if(records.Count > 15)
         {
             records.RemoveAt(0);
         }
