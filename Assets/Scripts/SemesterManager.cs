@@ -94,6 +94,22 @@ public class SemesterManager : MonoBehaviour
         SaveData(); // Save data before adding a new semester
     }
 
+    private void OnLostFocus() {
+        SaveData();
+    }
+
+    private void OnFocus() {
+        SaveData();
+    }
+
+    private void OnApplicationQuit() {
+        SaveData();
+    }
+    
+    private void OnApplicationFocus(bool focusStatus) {
+        SaveData();
+    }
+
     public void RemoveSemesterCard(int semesterIndex)
     {
         if (mainData.ContainsKey(semesterIndex))
