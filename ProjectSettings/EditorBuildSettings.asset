@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/PreAnimation.unity
+    guid: a3c78755427a80f41a81a57147c069a6
+  - enabled: 1
     path: Assets/Scenes/Attendance.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1

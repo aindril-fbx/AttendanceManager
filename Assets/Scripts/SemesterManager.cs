@@ -15,6 +15,7 @@ public class SemesterManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI CGPAText;
     public Dictionary<int, Dictionary<string, float[]>> mainData = new Dictionary<int, Dictionary<string, float[]>>();
+    [SerializeField] private List<semesterCard> semesterCards = new List<semesterCard>();
 
     public int currentEditingSemesterIndex = -1; // Index of the semester currently being edited
 
@@ -33,6 +34,7 @@ public class SemesterManager : MonoBehaviour
             {
                 GameObject newSemesterCard = Instantiate(semesterCardPrefab, semesterCardParent);
                 semesterCard semesterCardComponent = newSemesterCard.GetComponent<semesterCard>();
+                semesterCards.Add(semesterCardComponent);
                 if (semesterCardComponent != null)
                 {
                     semesterCardComponent.SM = this; // Set the reference to this SemesterManager
@@ -85,6 +87,7 @@ public class SemesterManager : MonoBehaviour
         }
         GameObject newSemesterCard = Instantiate(semesterCardPrefab, semesterCardParent);
         semesterCard semesterCardComponent = newSemesterCard.GetComponent<semesterCard>();
+        semesterCards.Add(semesterCardComponent);
         if (semesterCardComponent != null)
         {
             semesterCardComponent.SM = this; // Set the reference to this SemesterManager
@@ -105,10 +108,6 @@ public class SemesterManager : MonoBehaviour
     private void OnApplicationQuit() {
         SaveData();
     }
-    
-    private void OnApplicationFocus(bool focusStatus) {
-        SaveData();
-    }
 
     public void RemoveSemesterCard(int semesterIndex)
     {
@@ -116,7 +115,7 @@ public class SemesterManager : MonoBehaviour
         {
             mainData.Clear(); // Clear the main data dictionary
             Destroy(semesterCardParent.GetChild(semesterIndex - 1).gameObject); // Destroy the semester card game object
-
+            semesterCards.RemoveAt(semesterIndex-1);
             for (int i = 0; i < semesterCardParent.childCount; i++)
             {
                 semesterCard card = semesterCardParent.GetChild(i).GetComponent<semesterCard>();
@@ -164,6 +163,7 @@ public class SemesterManager : MonoBehaviour
         float totalCredits = 0f;
         float totalPoints = 0f;
 
+        /*
         foreach (var semester in mainData)
         {
             foreach (var subject in semester.Value)
@@ -174,12 +174,22 @@ public class SemesterManager : MonoBehaviour
                 totalPoints += subjectData[0] * subjectData[1]; // Credits * Grade Points
             }
         }
+        */
+
+        for(int i = 0; i<semesterCards.Count; i++){
+            if(semesterCards[i].credits <= 0f){
+                continue;
+            }
+            totalCredits += semesterCards[i].credits;
+            totalPoints += semesterCards[i].creditsEarned;
+        }
 
         if (totalCredits > 0)
         {
-            float CGPA = totalPoints / totalCredits;
-            CGPA = Mathf.Floor(CGPA * 100f) / 100f; // Round CGPA to 2 decimal places
-            CGPAText.text = CGPA.ToString("F2"); // Format CGPA to 2 decimal places
+            float cgpa = totalPoints / totalCredits;
+            cgpa = Mathf.Floor(cgpa * 100f) / 100f; // Truncate to 2 decimals
+
+            CGPAText.text = cgpa.ToString("F2");
         }
         else
         {
@@ -198,7 +208,6 @@ public class SemesterManager : MonoBehaviour
 
     public void SaveData()
     {
-        // Implement save logic here, e.g., using PlayerPrefs or a file system
         Debug.Log("Saving semester data...");
         BinaryFormatter formatter = new BinaryFormatter();
         string path = Application.persistentDataPath + "/" + "CGPAdata" + ".lol";

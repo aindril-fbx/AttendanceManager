@@ -16,9 +16,9 @@ public class sceneChanger : MonoBehaviour
     private void Start()
     {
         sidebarAnimation = GetComponent<sidebarAnimation>();
-        attendanceButton.onClick.AddListener(() => { ChangeScene(0); StartCoroutine(toggleSidebar()); });
-        cgpaButton.onClick.AddListener(() => { ChangeScene(1); StartCoroutine(toggleSidebar()); });
-        eventManagerButton.onClick.AddListener(() => { ChangeScene(2); StartCoroutine(toggleSidebar()); });
+        attendanceButton.onClick.AddListener(() => { ChangeScene(1); StartCoroutine(toggleSidebar()); });
+        cgpaButton.onClick.AddListener(() => { ChangeScene(2); StartCoroutine(toggleSidebar()); });
+        eventManagerButton.onClick.AddListener(() => { ChangeScene(3); StartCoroutine(toggleSidebar()); });
         int lastSceneIndex = PlayerPrefs.GetInt("LastScene", 0); // Get the last scene index or default to 0
         ChangeScene(lastSceneIndex); // Change to the last scene on start
         // Hello

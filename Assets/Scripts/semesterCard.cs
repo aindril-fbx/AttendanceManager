@@ -56,8 +56,10 @@ public class semesterCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     [SerializeField] private TMP_InputField newSubjectCreditText;
 
     [SerializeField] private TextMeshProUGUI semesterCardIndexText;
-    [SerializeField] private TextMeshProUGUI sgpaDisplayText;
-    [SerializeField] private TextMeshProUGUI creditsDisplayText;
+    [field: SerializeField]
+    public TMP_InputField sgpaDisplayText { get; private set; }
+    [field: SerializeField]
+    public TextMeshProUGUI creditsDisplayText {get; private set;}
     [SerializeField] private TextMeshProUGUI pointsDisplayText;
     [SerializeField] private TextMeshProUGUI subjectCountText;
 
@@ -70,6 +72,16 @@ public class semesterCard : MonoBehaviour, IPointerDownHandler, IPointerUpHandle
     {
         editButton.onClick.AddListener(OnEditButtonClick);
         addButton.onClick.AddListener(GetNewSubjectInput);
+        sgpaDisplayText.onEndEdit.AddListener((value) => {
+            if(float.TryParse(sgpaDisplayText.text, out float x)){
+                SGPA = x;
+                creditsEarned = x*credits;
+                creditsDisplayText.text = credits.ToString("F1");
+                pointsDisplayText.text = creditsEarned.ToString("F1");
+            }
+            SM.updateSemesterData(semesterIndex, subjectInfo);
+            SM.SaveData();
+        });
         rt = GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(rt.sizeDelta.x, offset); // Set initial height of the semester card
         calculateSGPA(); // Calculate SGPA on start
