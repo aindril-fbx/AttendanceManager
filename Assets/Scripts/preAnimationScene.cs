@@ -10,6 +10,9 @@ public class PreAnimationScene : MonoBehaviour
     {
         vidPlayer = GetComponent<VideoPlayer>();
         vidPlayer.loopPointReached += OnVideoFinished;
+        if (PlayerPrefs.GetFloat("startup", 1f) == 0f){
+            SceneManager.LoadScene(1);
+        }
     }
 
     private void OnVideoFinished(VideoPlayer vp){

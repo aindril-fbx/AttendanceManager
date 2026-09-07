@@ -11,6 +11,12 @@ public class FadeFromBlackAnimation : MonoBehaviour
 
     IEnumerator Start()
     {
+        if (PlayerPrefs.GetFloat("startup", 1f) == 0f)
+        {
+            Destroy(canvasGroup.gameObject);
+            yield break;
+        }
+
         if (canvasGroup == null) canvasGroup = GetComponent<CanvasGroup>();
         yield return new WaitForSeconds(delay);
         LeanTween.alphaCanvas(canvasGroup, 0f, duration)

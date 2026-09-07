@@ -13,6 +13,7 @@ public class sceneChanger : MonoBehaviour
 
     [SerializeField] private sidebarAnimation sidebarAnimation;
 
+
     private void Start()
     {
         sidebarAnimation = GetComponent<sidebarAnimation>();
@@ -21,7 +22,6 @@ public class sceneChanger : MonoBehaviour
         eventManagerButton.onClick.AddListener(() => { ChangeScene(3); StartCoroutine(toggleSidebar()); });
         int lastSceneIndex = PlayerPrefs.GetInt("LastScene", 0); // Get the last scene index or default to 0
         ChangeScene(lastSceneIndex); // Change to the last scene on start
-        // Hello
     }
 
     IEnumerator toggleSidebar()
